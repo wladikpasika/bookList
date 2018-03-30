@@ -1,3 +1,6 @@
+const findBooks = require('../models/BookList').findBooks;
+
+
 module.exports = {
 
     homepage(req,res,next){
@@ -11,7 +14,17 @@ module.exports = {
     },
 
     user(req,res,next){
+        return  findBooks({}).then(books =>{
+            res.locals.books = books;
+            res.render('user-page');
 
-        res.render('user-page')
+        }).catch(err => {
+            res.locals.books = [];
+            req.flash('error', [{msg:err}]);
+            return err;
+        });
+    },
+    addBook(req,res,next){
+        res.render('add');
     }
 };

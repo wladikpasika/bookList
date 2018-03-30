@@ -22,15 +22,14 @@ const userSchema = new Schema({
 });
 //добавляем автоинкримент для документов
 userSchema.plugin(autoincrement, {field: 'id'});
-
 module.exports.user = mongoose.model('users', userSchema);
 module.exports.createUser = function(newUser){
     return new Promise((resolve,reject)=>{
         return bcrypt.hash(newUser.password, saltRounds).then(hash => {
             newUser.password = hash;
-            return newUser.save(err => {
+            return newUser.save((err,result) => {
                 if(err)return reject (err);
-                return resolve();
+                return resolve(result);
             });
         }, err => {return reject (err)});
     });

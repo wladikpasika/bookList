@@ -1,18 +1,15 @@
 <header class="main-header">
-    <a href="/" class="logo">
+    <a href="<%= !user?'/':`/user/${user.id}`%>" class="logo">
         <span class="logo-mini"></span>
-        <span class="logo-lg"><b>Список книг</b></span>
+        <span class="logo-lg">
+            <b><%= !user?'Авторизироваться':'Список книг'%></b>
+        </span>
     </a>
     <nav class="navbar navbar-static-top">
 
         <div class="navbar-custom-menu">
             <ul class="nav navbar-nav">
                 <%if(user){%>
-                <li>
-                    <a href="/user/<%= user.id %>">
-                        Моя страница
-                    </a>
-                </li>
                 <%}%>
                 <li>
                     <%if(!user){%><a a href = "/registration">Зарегистрироваться</a><%}

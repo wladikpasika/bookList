@@ -20,10 +20,22 @@ const express = require('express'),
     router.get('/user/:id',(req,res,next)=>{
     return ViewController.user(req,res,next)
     });
+    router.get('/book/create',(req,res,next)=>{
+    return ViewController.addBook(req,res,next)
+    });
+    router.post('/book/create',(req,res,next)=>{
+    return MainController.addBook(req,res,next)
+    });
+    router.get('/book/delete/:id',(req,res,next)=>{
+    return MainController.deleteBook(req,res,next)
+    });
+    ///Это последний роут - все остальные страницы - 404
     router.get('*',(req,res,next)=>{
         "use strict";
         return res.render('404')
     });
+
+
 
 module.exports = router;
 

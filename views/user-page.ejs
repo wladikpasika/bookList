@@ -1,4 +1,29 @@
 <% layout('./layout') %>
-<div class="col-md-6">
-    <h1>Страница пользователя</h1>
+
+<% if(books){ %>
+<div class="container">
+    <div class = "row">
+        <h3>Регистр</h3>
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th>Название</th>
+                    <th>Автор</th>
+                    <th>Год</th>
+                    <th>Удалить</th>
+                </tr>
+                </thead>
+                <tbody>
+                <% books.forEach((book)=>{ %>
+                <tr>
+                    <td><%= book.title %></td>
+                    <td><%= book.author %></td>
+                    <td><%= book.year %></td>
+                    <td><a href = "/book/delete/<%= book.id %>">Удалить</a>
+                </tr>
+                <%})%>
+                </tbody>
+            </table>
+    </div>
 </div>
+<%}%>

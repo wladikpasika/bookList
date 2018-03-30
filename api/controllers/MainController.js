@@ -1,16 +1,17 @@
 const userModel = require('../models/User').user,
+    bookModel = require('../models/BookList').bookList,
     createUser = require('../models/User').createUser,
-    bcrypt = require('bcrypt'),
-    comparePassword = require('./helpers/loginCheck'),
+    createBook = require('../models/BookList').createBook,
+    removeBook = require('../models/BookList').removeBook,
     passport = require('passport'),
-    LocalStrategy = require('passport-local').Strategy;
-
+    LocalStrategy = require('passport-local').Strategy,
+    bcrypt = require('bcrypt'),
+    comparePassword = require('./helpers/loginCheck');
 //вынес, все что можно вынести с обхъекта
 passport.serializeUser((user, done)=>{done(null, user.id)});
 passport.deserializeUser((id, done)=>{
     userModel.findOne({id:id}).then((resolve)=>{done(null, resolve)},(reject)=>{done(reject)});
 });
-
 module.exports = {
     registration(req,res,next){
         let email = req.body.email,
@@ -36,7 +37,6 @@ module.exports = {
             req.flash('success_msg', 'Вы зарегистрированы');
             return res.redirect('/');
         }).catch(err => {
-            console.log(err);
             req.flash('error', [{msg:JSON.stringify(err)}]);
             return res.redirect('/registration');
         });
@@ -76,5 +76,38 @@ module.exports = {
            return  res.redirect('/')
         }
         else {return res.redirect('/users/main')}
+    },
+    addBook(req, res, next){
+        req.checkBody('title', 'Пустое поле \'Название книги\'').notEmpty();
+        req.checkBody('author', 'Пустое поле \'Автор\'').notEmpty();
+        req.checkBody('year', 'Пустое поле \'Год\'').notEmpty();
+        let errors = req.validationErrors();
+        if (errors) {
+            req.flash('error', errors);
+            return res.redirect(`/user/${req.user.id}`);
+        }
+        let newBook = new bookModel({
+            'title': req.body.title,
+            'year': req.body.year,
+            'author': req.body.author,
+        });
+
+        createBook(newBook).then(book =>{
+            req.flash('success_msg', `Вы Добавили книгу ${book.title}`);
+            return res.redirect(`/user/${req.user.id}`);
+        }).catch(err => {
+            req.flash('error', [{msg:JSON.stringify(err)}]);
+            return res.redirect(`/user/${req.user.id}`);
+        });
+    },
+    deleteBook(req, res, next){
+        removeBook({id:req.param('id')}).then(result => {
+            console.log(result);
+            req.flash('success_msg', `Вы удалили книгу`);
+            res.redirect(`/user/${req.user.id}`);
+        }).catch(err =>{
+            req.flash('error', [{msg:JSON.stringify(err)}]);
+            return res.redirect(`/user/${req.user.id}`);
+        })
     }
 };
