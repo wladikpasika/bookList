@@ -42,7 +42,6 @@ new Vue({
                 setTimeout(function(){
                     successElem.style.display = 'none';},5000)
             }
-            return;
         }
     },
     mounted(){
