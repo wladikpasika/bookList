@@ -1,7 +1,9 @@
 const express = require('express'),
     router = express.Router(),
     MainController  = require('../api/controllers/MainController'),
+    Api  = require('../api/controllers/api'),
     ViewController  = require('../api/controllers/ViewController');
+
     router.get('/',(req,res,next)=>{
     return ViewController.homepage(req,res,next)
     });
@@ -27,15 +29,21 @@ const express = require('express'),
     return MainController.addBook(req,res,next)
     });
     router.get('/book/delete/:id',(req,res,next)=>{
-    return MainController.deleteBook(req,res,next)
+        //если это ajax - то контроллер api
+    return req.get('X-Requested-With')
+        ?Api.deleteBook(req,res,next)
+        :MainController.deleteBook(req,res,next)
+    });
+    router.get('/book/list',(req,res,next)=>{
+        if(req.get('X-Requested-With')){
+            return Api.findBook(req,res,next)
+        }
     });
     ///Это последний роут - все остальные страницы - 404
     router.get('*',(req,res,next)=>{
         "use strict";
         return res.render('404')
     });
-
-
 
 module.exports = router;
 

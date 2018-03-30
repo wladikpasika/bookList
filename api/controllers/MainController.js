@@ -102,7 +102,6 @@ module.exports = {
     },
     deleteBook(req, res, next){
         removeBook({id:req.param('id')}).then(result => {
-            console.log(result);
             req.flash('success_msg', `Вы удалили книгу`);
             res.redirect(`/user/${req.user.id}`);
         }).catch(err =>{

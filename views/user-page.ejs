@@ -13,15 +13,15 @@
                     <th>Удалить</th>
                 </tr>
                 </thead>
-                <tbody>
-                <% books.forEach((book)=>{ %>
-                <tr>
-                    <td><%= book.title %></td>
-                    <td><%= book.author %></td>
-                    <td><%= book.year %></td>
-                    <td><a href = "/book/delete/<%= book.id %>">Удалить</a>
+                <tbody id="tbody">
+
+
+                <tr v-for="(book, key) in books">
+                    <td>{{book.title}}</td>
+                    <td>{{book.author}}</td>
+                    <td>{{book.year}}</td>
+                    <td><a :href = "'/book/delete/'+book.id" @click = "remove($event)">Удалить</a>
                 </tr>
-                <%})%>
                 </tbody>
             </table>
     </div>

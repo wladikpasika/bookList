@@ -15,8 +15,6 @@
   <link rel="stylesheet" href="/assets/fonts/font-awesome/css/font-awesome.min.css">
   <title>Title страницы</title>
 </head>
-<body>
-
 <body class = "skin-blue sidebar-mini admin">
 <% include ./templates/header.ejs %>
 <div class = "container mainSection">
@@ -27,10 +25,17 @@
   </div>
 </div>
 
-<footer>
-  <script src="/assets/js/1-jquery/jquery-3.3.1.min.js"></script>
-  <script src="/assets/js/2-bootstrap/bootstrap.js"></script>
-  <script src="/assets/js/2-bootstrap/bootstrap.min.js"></script>
-</footer>
+    <footer>
+      <script  src="/assets/js/1-jquery/jquery-3.3.1.min.js"></script>
+      <!--<script async src="/assets/js/2-bootstrap/bootstrap.js"></script>-->
+
+      <script src="/assets/js/2-bootstrap/bootstrap.min.js"></script>
+      <% if(originalUrl.match(/\/user\/\d+$/i)){%>
+      <!--подгружаем только на странице пользователя-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.13/vue.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/vue-resource@1.5.0"></script>
+      <script src="/assets/js/vue-render-table.js"></script>
+        <%}%>
+    </footer>
 </body>
 </html>

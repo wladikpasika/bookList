@@ -1,6 +1,5 @@
 const mongoose = require('mongoose'),
     Schema = mongoose.Schema,
-    connect = require('../../config/connection'),
     autoincrement = require('simple-mongoose-autoincrement');
 
 const bookListSchema = new Schema({
@@ -30,8 +29,10 @@ module.exports.findBooks = function(condition){
 module.exports.removeBook = function(condition){
     return new Promise((resolve,reject)=>{
         return newBook.remove(condition,(err,result) => {
-            if(result||err===null){return resolve(result)}
-            else if(err){return reject(err)}
+            //проверяем количество удаленных книг result.n и успех операции
+            if(result&&result.n>0&&err===null){return resolve(result)}
+            //книга не найдена или ошибка удаления
+            else if(err||result.n===0){return reject(err)}
         });
     });
 };

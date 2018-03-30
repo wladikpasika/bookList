@@ -12,7 +12,6 @@ const express = require('express'),
     //routes = require('./config/routes'),
     policies = require('./config/policies'),
     ejsLocals = require('ejs-locals');
-
 //мидллвэры для шаблонов
 app.engine('ejs', ejsLocals);
 app.set('views', __dirname + '/views');
@@ -55,6 +54,7 @@ app.use(function (req, res, next) {
     res.locals.error_msg = req.flash('error_msg');
     res.locals.error = req.flash('error');
     res.locals.user = req.user || null;
+    res.locals.originalUrl = req.originalUrl;
     next();
 
 });
@@ -62,6 +62,6 @@ app.use(function (req, res, next) {
 app.use('/assets', express.static(__dirname + '/assets'));
 //все остальное на роуты
 app.use('/', policies/*routes*/);
-app.listen(3000, function () {
+app.listen(9000, function () {
     console.log('Listening on port 3000!');
 });
